@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis CRISP-DM: Calidad del Café</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        :root {
+            --primary-color: #6f4e37;
+            /* Coffee Brown */
+            --secondary-color: #a0522d;
+            /* Sienna */
+            --text-color: #f0f2f5;
+            --bg-color: #1a1a2e;
+            --card-bg-color: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            background-image: url('https://img.freepik.com/free-photo/coffee-beans-top-view_1150-6420.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-color);
+        }
+
+        .main-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: rgba(15, 12, 41, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-right: 1px solid var(--primary-color);
+        }
+
+        .sidebar h2 {
+            color: var(--text-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .nav-pills .nav-link {
+            color: var(--text-color);
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            text-align: left;
+            padding: 12px 20px;
+        }
+
+        .nav-pills .nav-link.active,
+        .nav-pills .show>.nav-link {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-pills .nav-link:hover:not(.active) {
+            background-color: var(--card-bg-color);
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 40px;
+            background: rgba(26, 26, 46, 0.85);
+            backdrop-filter: blur(5px);
+        }
+
+        .card {
+            background-color: var(--card-bg-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 15px;
+            margin-top: 0;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .card-header {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            font-weight: bold;
+            border-top-left-radius: 14px;
+            border-top-right-radius: 14px;
+            border-bottom: none;
+        }
+
+        h1,
+        h2,
+        h5 {
+            color: var(--text-color);
+        }
+
+        /* Corrección de Tablas: Fondo blanco, texto negro */
+        .table {
+            color: black !important;
+            background-color: rgba(255, 255, 255, 0.9) !important;
+            border-radius: 5px;
+        }
+
+        .table thead th {
+            background-color: #333 !important;
+            color: white !important;
+        }
+
+        .table-bordered {
+            border-color: var(--secondary-color);
+        }
+
+        .card-body,
+        .card-body p,
+        .card-body li,
+        .card-body h2,
+        .card-body h3,
+        .card-body h4 {
+            color: var(--text-color);
+        }
+
+        /* Info Box: Texto negro para legibilidad */
+        .info-box {
+            background-color: rgba(255, 255, 255, 0.59);
+            /* Fondo claro */
+            color: black;
+            /* Texto negro */
+            border-left: 4px solid var(--secondary-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-box h3,
+        .info-box h5 {
+            margin-top: 0;
+            color: var(--primary-color);
+            /* Títulos en marrón café */
+            font-weight: bold;
+        }
+
+        .info-box p,
+        .info-box li {
+            color: black;
+        }
+
+        /* Estilos para sub-pestañas en Fase 3 */
+        .fase3-tabs .nav-link {
+            color: var(--text-color);
+            background-color: transparent;
+            border: 1px solid transparent;
+            border-bottom-color: var(--secondary-color);
+            margin-bottom: -1px;
+        }
+
+        .fase3-tabs .nav-link.active {
+            color: white;
+            background-color: var(--card-bg-color);
+            border-color: var(--secondary-color) var(--secondary-color) transparent;
+        }
+
+        .fase3-tabs .nav-link:hover {
+            border-color: var(--secondary-color) var(--secondary-color) transparent;
+        }
+
+        .fase3-tab-content {
+            border: 1px solid var(--secondary-color);
+            padding: 20px;
+            border-radius: 0 0 8px 8px;
+        }
+
+        pre {
+            background-color: rgba(0, 0, 0, 0.3) !important;
+            color: #eee;
+            border: 1px solid var(--secondary-color);
+        }
+
+        img {
+            border: 2px solid var(--secondary-color);
+            box-shadow: 0 0 15px var(--secondary-color);
+        }
+
+        /* Fixes for Accordion and List Group visibility */
+        .accordion-body,
+        .accordion-body p,
+        .accordion-body li {
+            color: black !important;
+        }
+
+        .list-group-item {
+            color: black !important;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .accordion-button {
+            color: black;
+            font-weight: bold;
+        }
+
+        .accordion-button:not(.collapsed) {
+            color: var(--primary-color);
+            background-color: #e7f1ff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-container">
+        <!-- Menú Vertical Izquierdo -->
+        <div class="sidebar">
+            <h2>Menú CRISP-DM</h2>
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <button class="nav-link active" id="inicio-tab" data-bs-toggle="pill" data-bs-target="#inicio"
+                    type="button" role="tab" aria-controls="inicio" aria-selected="true">Inicio (EDA)</button>
+                <button class="nav-link" id="fase1-tab" data-bs-toggle="pill" data-bs-target="#fase1" type="button"
+                    role="tab" aria-controls="fase1" aria-selected="false">Fase 1: Comprensión del Negocio</button>
+                <button class="nav-link" id="fase2-tab" data-bs-toggle="pill" data-bs-target="#fase2" type="button"
+                    role="tab" aria-controls="fase2" aria-selected="false">Fase 2: Comprensión de los Datos</button>
+                <button class="nav-link" id="fase3-tab" data-bs-toggle="pill" data-bs-target="#fase3" type="button"
+                    role="tab" aria-controls="fase3" aria-selected="false">Fase 3: Preparación de los Datos</button>
+                <button class="nav-link" id="fase4-tab" data-bs-toggle="pill" data-bs-target="#fase4" type="button"
+                    role="tab" aria-controls="fase4" aria-selected="false">Fase 4: Modelado</button>
+                <button class="nav-link" id="fase5-tab" data-bs-toggle="pill" data-bs-target="#fase5" type="button"
+                    role="tab" aria-controls="fase5" aria-selected="false">Fase 5: Evaluación</button>
+                <button class="nav-link" id="fase6-tab" data-bs-toggle="pill" data-bs-target="#fase6" type="button"
+                    role="tab" aria-controls="fase6" aria-selected="false">Fase 6: Despliegue</button>
+            </div>
+        </div>
+
+        <!-- Contenido Principal Derecho -->
+        <div class="content">
+            <h1 class="text-center mb-4">Análisis de Calidad del Café (Arabica)</h1>
+            <div class="tab-content" id="v-pills-tabContent">
+                <!-- Pestaña Inicio (EDA) -->
+                <div class="tab-pane fade show active" id="inicio" role="tabpanel" aria-labelledby="inicio-tab">
+                    <div class="card">
+                        <div class="card-header">Dashboard de Análisis de Calidad</div>
+                        <div class="card-body">
+                            <!-- Key Metrics -->
+                            <div class="row mb-4">
+                                <div class="col-md-3">
+                                    <div class="card text-white bg-primary mb-3">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">Total de Muestras</h5>
+                                            <p class="card-text fs-4">1311</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card text-white bg-danger mb-3">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">Alta Calidad (>=84)</h5>
+                                            <p class="card-text fs-4">19.68%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card text-white bg-info mb-3">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">Puntaje Promedio</h5>
+                                            <p class="card-text fs-4">82.11</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card text-white bg-success mb-3">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">Altitud Media</h5>
+                                            <p class="card-text fs-4">1774m</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Charts -->
+                            <div class="row text-center g-4">
+                                <div class="col-md-6">
+                                    <h5>Distribución de Calidad</h5>
+                                    <img src="plots_cafe/quality_distribution.png" alt="Distribución de Calidad"
+                                        class="img-fluid rounded" style="max-width: 400px;">
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Distribución de Altitud</h5>
+                                    <img src="plots_cafe/altitude_distribution.png" alt="Distribución de Altitud"
+                                        class="img-fluid rounded" style="max-width: 400px;">
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Humedad vs. Calidad</h5>
+                                    <img src="plots_cafe/moisture_vs_quality.png" alt="Humedad vs Calidad"
+                                        class="img-fluid rounded" style="max-width: 400px;">
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Defectos vs. Calidad</h5>
+                                    <img src="plots_cafe/defects_vs_quality.png" alt="Defectos vs Calidad"
+                                        class="img-fluid rounded" style="max-width: 400px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fase 1 -->
+                <div class="tab-pane fade" id="fase1" role="tabpanel" aria-labelledby="fase1-tab">
+                    <div class="card">
+                        <div class="card-header">Fase 1: Comprensión del Negocio</div>
+                        <div class="card-body">
+                            <p>Esta fase establece los objetivos para identificar café de especialidad de alta calidad,
+                                crucial para compradores y tostadores.</p>
+
+                            <div class="accordion" id="accordionFase1">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingOne">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#collapseOne" aria-expanded="true"
+                                            aria-controls="collapseOne">
+                                            1.1 Objetivos del Negocio
+                                        </button>
+                                    </h2>
+                                    <div id="collapseOne" class="accordion-collapse collapse show"
+                                        aria-labelledby="headingOne" data-bs-parent="#accordionFase1">
+                                        <div class="accordion-body">
+                                            <div class="info-box">
+                                                <h5>Meta Principal</h5>
+                                                <p>El objetivo es <strong>identificar lotes de café de Alta Calidad
+                                                        (Puntaje >= 84)</strong> antes de la cata oficial, basándose en
+                                                    características agronómicas y de origen.</p>
+                                                <ul>
+                                                    <li><strong>Objetivo Primario:</strong> Optimizar el proceso de
+                                                        selección de proveedores enfocándose en regiones y
+                                                        características que prometen mayor calidad.</li>
+                                                    <li><strong>Beneficio:</strong> Reducir costos de logística y cata
+                                                        al filtrar lotes con baja probabilidad de ser excepcionales.
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingThree">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#collapseThree"
+                                            aria-expanded="false" aria-controls="collapseThree">
+                                            1.3 Objetivos de Minería de Datos
+                                        </button>
+                                    </h2>
+                                    <div id="collapseThree" class="accordion-collapse collapse"
+                                        aria-labelledby="headingThree" data-bs-parent="#accordionFase1">
+                                        <div class="accordion-body">
+                                            <p>Traducir la necesidad de negocio a un problema de
+                                                clasificación.</p>
+                                            <ul>
+                                                <li><strong>Variable Objetivo:</strong> <code>HighQuality</code> (1 si
+                                                    Total.Cup.Points >= 84, 0 si no).</li>
+                                                <li><strong>Criterio de Éxito:</strong> Un modelo con un Recall
+                                                    aceptable para la clase positiva (detectar el buen café) sin generar
+                                                    demasiados falsos positivos.</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fase 2 -->
+                <div class="tab-pane fade" id="fase2" role="tabpanel" aria-labelledby="fase2-tab">
+                    <div class="card">
+                        <div class="card-header">Fase 2: Comprensión de los Datos</div>
+                        <div class="card-body">
+                            <p>Análisis del dataset <code>arabica_data_cleaned.csv</code>.</p>
+
+                            <div class="info-box mt-4">
+                                <h3>2.1 Descripción de Datos</h3>
+                                <ul>
+                                    <li><strong>Registros:</strong> 1311 muestras de café.</li>
+                                    <li><strong>Variables:</strong> 44 columnas originales.</li>
+                                    <li><strong>Target:</strong> Se creó la variable binaria basada en el puntaje de
+                                        cata.</li>
+                                </ul>
+                            </div>
+
+                            <div class="info-box">
+                                <h3>2.2 Hipótesis Iniciales</h3>
+                                <table class="table table-bordered mt-3">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th class="text-white">Variable</th>
+                                            <th class="text-white">Hipótesis</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><code>Altitude</code></td>
+                                            <td>A mayor altitud, generalmente mejor calidad debido a la maduración lenta
+                                                del grano.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Defects</code></td>
+                                            <td>La presencia de defectos (Categoría 1 o 2) debería correlacionarse
+                                                negativamente con la calidad.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Processing Method</code></td>
+                                            <td>Ciertos métodos (ej. Lavado vs Natural) pueden influir en el perfil de
+                                                taza.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fase 3 -->
+                <div class="tab-pane fade" id="fase3" role="tabpanel" aria-labelledby="fase3-tab">
+                    <div class="card">
+                        <div class="card-header">Fase 3: Preparación de los Datos</div>
+                        <div class="card-body">
+                            <p>Esta es la fase más intensiva y crucial. Aquí se limpian y transforman los datos brutos
+                                para que puedan ser utilizados por los algoritmos de machine learning.</p>
+
+                            <ul class="nav nav-tabs fase3-tabs mt-4" id="fase3Tab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="diccionario-tab" data-bs-toggle="tab"
+                                        data-bs-target="#diccionario" type="button" role="tab"
+                                        aria-controls="diccionario" aria-selected="true">Diccionario de
+                                        Variables</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="sin-senal-tab" data-bs-toggle="tab"
+                                        data-bs-target="#sin-senal" type="button" role="tab" aria-controls="sin-senal"
+                                        aria-selected="false">Variables sin Señal</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="checklist-tab" data-bs-toggle="tab"
+                                        data-bs-target="#checklist" type="button" role="tab" aria-controls="checklist"
+                                        aria-selected="false">Checklist de Preparación</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="categoricas-tab" data-bs-toggle="tab"
+                                        data-bs-target="#categoricas" type="button" role="tab"
+                                        aria-controls="categoricas" aria-selected="false">Variables Categóricas</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="simetria-tab" data-bs-toggle="tab"
+                                        data-bs-target="#simetria" type="button" role="tab" aria-controls="simetria"
+                                        aria-selected="false">Análisis de Simetría</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="dataset-final-tab" data-bs-toggle="tab"
+                                        data-bs-target="#dataset-final" type="button" role="tab"
+                                        aria-controls="dataset-final" aria-selected="false">Dataset Final</button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content fase3-tab-content" id="fase3TabContent">
+                                <!-- Diccionario -->
+                                <div class="tab-pane fade show active" id="diccionario" role="tabpanel">
+                                    <h4 class="mt-3">Diccionario de Variables Seleccionadas</h4>
+                                    <p>Variables clave utilizadas en el modelo:</p>
+                                    <div class="table-responsive" style="max-height: 400px;">
+                                        <table class="table table-sm table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Variable</th>
+                                                    <th>Definición</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Country.of.Origin</td>
+                                                    <td>País donde se cultivó el café.</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Region</td>
+                                                    <td>Región específica dentro del país.</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Processing.Method</td>
+                                                    <td>Método de procesamiento (Lavado, Natural, etc.).</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Moisture</td>
+                                                    <td>Porcentaje de humedad en el grano.</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Category.One.Defects</td>
+                                                    <td>Número de defectos primarios (graves).</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Category.Two.Defects</td>
+                                                    <td>Número de defectos secundarios (leves).</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>altitude_mean_meters</td>
+                                                    <td>Altitud media de la finca en metros.</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Color</td>
+                                                    <td>Color del grano verde (Blue-Green, Green, etc.).</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>HighQuality (Target)</td>
+                                                    <td>1 si Puntos >= 84, 0 si no.</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Sin Señal -->
+                                <div class="tab-pane fade" id="sin-senal" role="tabpanel">
+                                    <h4 class="mt-3">Eliminación de Variables</h4>
+                                    <p>Se eliminaron variables por dos razones principales: fuga de datos (data leakage)
+                                        o falta de relevancia predictiva.</p>
+                                    <table class="table table-bordered mt-3">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th>Variable</th>
+                                                <th>Razón para Eliminar</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><code>Aroma, Flavor, etc.</code></td>
+                                                <td>Son componentes directos del puntaje final. Usarlos sería "trampa"
+                                                    ya que no se conocen antes de la cata.</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>Lot.Number, Farm.Name</code></td>
+                                                <td>Identificadores únicos con demasiada cardinalidad y poca
+                                                    generalización.</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>ICO.Number</code></td>
+                                                <td>Identificador administrativo sin valor agronómico.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Checklist -->
+                                <div class="tab-pane fade" id="checklist" role="tabpanel">
+                                    <div class="checklist-container">
+                                        <h5 class="mb-3">Detalle de Transformaciones (Paso a Paso)</h5>
+                                        <div class="accordion" id="accordionChecklist">
+
+                                            <!-- Paso 1: Limpieza -->
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="headingCheck1">
+                                                    <button class="accordion-button" type="button"
+                                                        data-bs-toggle="collapse" data-bs-target="#collapseCheck1"
+                                                        aria-expanded="true" aria-controls="collapseCheck1">
+                                                        1. Limpieza de Nulos
+                                                    </button>
+                                                </h2>
+                                                <div id="collapseCheck1" class="accordion-collapse collapse show"
+                                                    aria-labelledby="headingCheck1"
+                                                    data-bs-parent="#accordionChecklist">
+                                                    <div class="accordion-body">
+                                                        <p>Se identificaron valores faltantes en variables críticas.
+                                                            Estrategia aplicada:</p>
+                                                        <ul>
+                                                            <li><strong>altitude_mean_meters:</strong> Imputación con la
+                                                                <strong>Mediana</strong> (para ser robusto a outliers).
+                                                            </li>
+                                                            <li><strong>Region:</strong> Imputación con valor constante
+                                                                <strong>"missing"</strong> (para no perder la fila).
+                                                            </li>
+                                                            <li><strong>Processing.Method:</strong> Imputación con la
+                                                                moda (valor más frecuente).</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Paso 2: Eliminación -->
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="headingCheck2">
+                                                    <button
+                                                        class="accordion-button collapsed d-flex justify-content-between align-items-center"
+                                                        type="button" data-bs-toggle="collapse"
+                                                        data-bs-target="#collapseCheck2" aria-expanded="false"
+                                                        aria-controls="collapseCheck2">
+                                                        <span class="me-auto">2. Eliminación de Variables</span>
+                                                        <span class="badge bg-primary rounded-pill ms-2">Hecho: 30+
+                                                            columnas</span>
+                                                    </button>
+                                                </h2>
+                                                <div id="collapseCheck2" class="accordion-collapse collapse"
+                                                    aria-labelledby="headingCheck2"
+                                                    data-bs-parent="#accordionChecklist">
+                                                    <div class="accordion-body">
+                                                        <p>Se eliminaron 30+ columnas para evitar "Data Leakage"
+                                                            (trampa) o ruido.</p>
+                                                        <table class="table table-sm table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Variable(s)</th>
+                                                                    <th>Motivo de Eliminación</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><code>Aroma</code>, <code>Flavor</code>,
+                                                                        <code>Aftertaste</code>, <code>Acidity</code>,
+                                                                        <code>Body</code>, <code>Balance</code>,
+                                                                        <code>Uniformity</code>, <code>Clean.Cup</code>,
+                                                                        <code>Sweetness</code>,
+                                                                        <code>Cupper.Points</code>
+                                                                    </td>
+                                                                    <td><strong>Data Leakage:</strong> Son componentes
+                                                                        directos de la variable objetivo (Total Cup
+                                                                        Points). Conocerlos es conocer la respuesta.
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><code>Lot.Number</code>, <code>Mill</code>,
+                                                                        <code>ICO.Number</code>, <code>Farm.Name</code>,
+                                                                        <code>Producer</code>, <code>Owner</code>
+                                                                    </td>
+                                                                    <td><strong>Alta Cardinalidad /
+                                                                            Irrelevante:</strong> Identificadores únicos
+                                                                        o texto libre que no generalizan para un modelo
+                                                                        predictivo.</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><code>Unnamed: 0</code></td>
+                                                                    <td><strong>Índice:</strong> Artefacto del archivo
+                                                                        CSV.</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Paso 3: Codificación -->
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="headingCheck3">
+                                                    <button
+                                                        class="accordion-button collapsed d-flex justify-content-between align-items-center"
+                                                        type="button" data-bs-toggle="collapse"
+                                                        data-bs-target="#collapseCheck3" aria-expanded="false"
+                                                        aria-controls="collapseCheck3">
+                                                        <span class="me-auto">3. Codificación Categórica</span>
+                                                        <span class="badge bg-primary rounded-pill ms-2">Hecho: One-Hot
+                                                            Encoding</span>
+                                                    </button>
+                                                </h2>
+                                                <div id="collapseCheck3" class="accordion-collapse collapse"
+                                                    aria-labelledby="headingCheck3"
+                                                    data-bs-parent="#accordionChecklist">
+                                                    <div class="accordion-body">
+                                                        <p>Transformación de texto a números usando <strong>One-Hot
+                                                                Encoding</strong>.</p>
+                                                        <ul>
+                                                            <li><strong>Variables Afectadas:</strong>
+                                                                <code>Country.of.Origin</code>, <code>Region</code>,
+                                                                <code>Processing.Method</code>, <code>Color</code>.
+                                                            </li>
+                                                            <li><strong>Resultado:</strong> Se generaron columnas
+                                                                binarias (ej. <code>Country_Colombia=1</code>,
+                                                                <code>Country_Brazil=0</code>).
+                                                            </li>
+                                                            <li><strong>Impacto:</strong> Explosión de dimensionalidad
+                                                                (de 44 a 396 columnas).</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Paso 4: Balanceo -->
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="headingCheck4">
+                                                    <button
+                                                        class="accordion-button collapsed d-flex justify-content-between align-items-center"
+                                                        type="button" data-bs-toggle="collapse"
+                                                        data-bs-target="#collapseCheck4" aria-expanded="false"
+                                                        aria-controls="collapseCheck4">
+                                                        <span class="me-auto">4. Balanceo de Clases</span>
+                                                        <span class="badge bg-primary rounded-pill ms-2">Hecho:
+                                                            SMOTE</span>
+                                                    </button>
+                                                </h2>
+                                                <div id="collapseCheck4" class="accordion-collapse collapse"
+                                                    aria-labelledby="headingCheck4"
+                                                    data-bs-parent="#accordionChecklist">
+                                                    <div class="accordion-body">
+                                                        <p>El dataset original estaba desbalanceado (80% Normal vs 20%
+                                                            Alta Calidad).</p>
+                                                        <ul>
+                                                            <li><strong>Técnica:</strong> SMOTE (Synthetic Minority
+                                                                Over-sampling Technique).</li>
+                                                            <li><strong>Acción:</strong> Se crearon "cafés sintéticos"
+                                                                de Alta Calidad interpolando entre muestras existentes.
+                                                            </li>
+                                                            <li><strong>Objetivo:</strong> Evitar que el modelo aprenda
+                                                                a predecir siempre "Normal" por pereza estadística.</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Paso 5: Escalamiento -->
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="headingCheck5">
+                                                    <button
+                                                        class="accordion-button collapsed d-flex justify-content-between align-items-center"
+                                                        type="button" data-bs-toggle="collapse"
+                                                        data-bs-target="#collapseCheck5" aria-expanded="false"
+                                                        aria-bs-controls="collapseCheck5">
+                                                        <span class="me-auto">5. Escalamiento Numérico</span>
+                                                        <span class="badge bg-primary rounded-pill ms-2">Hecho:
+                                                            StandardScaler</span>
+                                                    </button>
+                                                </h2>
+                                                <div id="collapseCheck5" class="accordion-collapse collapse"
+                                                    aria-labelledby="headingCheck5"
+                                                    data-bs-parent="#accordionChecklist">
+                                                    <div class="accordion-body">
+                                                        <p>Estandarización de variables continuas para que tengan media
+                                                            0 y desviación estándar 1.</p>
+                                                        <ul>
+                                                            <li><strong>Variables:</strong>
+                                                                <code>altitude_mean_meters</code>,
+                                                                <code>Moisture</code>,
+                                                                <code>Category.One.Defects</code>,
+                                                                <code>Category.Two.Defects</code>.
+                                                            </li>
+                                                            <li><strong>Razón:</strong> Algoritmos como Regresión
+                                                                Logística y KNN son sensibles a la escala (metros vs
+                                                                porcentaje).</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Categóricas -->
+                                <div class="tab-pane fade" id="categoricas" role="tabpanel">
+                                    <h4 class="mt-3">Tratamiento de Variables Categóricas</h4>
+                                    <div class="info-box mt-4">
+                                        <h5>Consecuencias: Explosión de Dimensionalidad</h5>
+                                        <p>La codificación expande drásticamente el dataset. De <strong>44 columnas
+                                                originales</strong>, el proceso de One-Hot Encoding (especialmente en la
+                                            variable <code>Region</code> y <code>Country.of.Origin</code>) genera un
+                                            total de <strong>396 columnas finales</strong>.</p>
+                                        <p>Esto ocurre porque se crea una nueva columna binaria (0 o 1) para cada región
+                                            única encontrada en los datos. Aunque aumenta la complejidad, es necesario
+                                            para que el modelo entienda la geografía sin asumir un orden numérico falso.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Simetría -->
+                                <div class="tab-pane fade" id="simetria" role="tabpanel">
+                                    <h4 class="mt-3">Análisis de Simetría y Datos Atípicos</h4>
+                                    <p>Visualización de la distribución de variables clave para detectar sesgos y
+                                        outliers.</p>
+                                    <div class="row text-center g-4 mt-3">
+                                        <div class="col-md-6">
+                                            <h5>Altitud (Metros)</h5>
+                                            <img src="plots_cafe/distribution_analysis_altitude_mean_meters.png"
+                                                alt="Distribución Altitud" class="img-fluid rounded"
+                                                style="max-width: 400px;">
+                                            <p class="small mt-2">Distribución casi normal, centrada en ~1500m.</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5>Humedad (%)</h5>
+                                            <img src="plots_cafe/distribution_analysis_Moisture.png"
+                                                alt="Distribución Humedad" class="img-fluid rounded"
+                                                style="max-width: 400px;">
+                                            <p class="small mt-2">Concentración fuerte alrededor del 11-12%.</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5>Defectos Cat. 1</h5>
+                                            <img src="plots_cafe/distribution_analysis_Category.One.Defects.png"
+                                                alt="Distribución Defectos 1" class="img-fluid rounded"
+                                                style="max-width: 400px;">
+                                            <p class="small mt-2">Fuertemente sesgada a 0 (la mayoría no tiene defectos
+                                                graves).</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5>Defectos Cat. 2</h5>
+                                            <img src="plots_cafe/distribution_analysis_Category.Two.Defects.png"
+                                                alt="Distribución Defectos 2" class="img-fluid rounded"
+                                                style="max-width: 400px;">
+                                            <p class="small mt-2">Sesgada a la derecha, algunos lotes con muchos
+                                                defectos leves.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Dataset Final -->
+                                <div class="tab-pane fade" id="dataset-final" role="tabpanel">
+                                    <div class="info-box mt-4">
+                                        <h5>Dataset Procesado</h5>
+                                        <p>El dataset final contiene las variables transformadas listas para los
+                                            modelos.</p>
+                                        <p>Contiene <strong>1311 filas</strong> y <strong>396 columnas</strong>
+                                            (confirmado tras One-Hot Encoding).</p>
+                                        <a href="dataset_cafe_procesado.csv" class="btn btn-primary mt-3"
+                                            download>Descargar dataset_cafe_procesado.csv</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fase 4 -->
+                <div class="tab-pane fade" id="fase4" role="tabpanel" aria-labelledby="fase4-tab">
+                    <div class="card">
+                        <div class="card-header">Fase 4: Modelado</div>
+                        <div class="card-body">
+                            <p>Evaluación de modelos predictivos para clasificar café de alta calidad.</p>
+
+                            <ul class="nav nav-tabs fase3-tabs mt-4" id="fase4Tab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="logistica-tab" data-bs-toggle="tab"
+                                        data-bs-target="#logistica" type="button" role="tab" aria-controls="logistica"
+                                        aria-selected="true">Regresión Logística</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="arbol-tab" data-bs-toggle="tab" data-bs-target="#arbol"
+                                        type="button" role="tab" aria-controls="arbol" aria-selected="false">Árbol de
+                                        Decisión</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="rf-tab" data-bs-toggle="tab" data-bs-target="#rf"
+                                        type="button" role="tab" aria-controls="rf" aria-selected="false">Random
+                                        Forest</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="conclusion-tab" data-bs-toggle="tab"
+                                        data-bs-target="#conclusion" type="button" role="tab" aria-controls="conclusion"
+                                        aria-selected="false">Conclusiones</button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content fase3-tab-content" id="fase4TabContent">
+                                <!-- Regresión Logística -->
+                                <div class="tab-pane fade show active" id="logistica" role="tabpanel">
+                                    <div class="info-box mt-4">
+                                        <h5>Modelo 1: Regresión Logística</h5>
+                                        <p>Modelo lineal base que estima la probabilidad de que un café sea de alta
+                                            calidad.</p>
+                                        <div class="row align-items-center mt-3">
+                                            <div class="col-md-6">
+                                                <img src="plots_cafe/confusion_matrix_regresión_logística.png"
+                                                    alt="Matriz Confusión Logística" class="img-fluid rounded"
+                                                    style="max-width: 400px;">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><strong>Análisis de la Matriz:</strong></p>
+                                                <ul>
+                                                    <li><strong>Verdaderos Negativos (243):</strong> Predijo
+                                                        correctamente que 243 cafés eran normales.</li>
+                                                    <li><strong>Falsos Positivos (73):</strong> Predijo incorrectamente
+                                                        que 73 cafés eran de alta calidad (falsas alarmas).</li>
+                                                    <li><strong>Falsos Negativos (40):</strong> Predijo incorrectamente
+                                                        que 40 cafés eran normales, pero eran de alta calidad. ¡Pérdida
+                                                        de oportunidad!</li>
+                                                    <li><strong>Verdaderos Positivos (38):</strong> Identificó
+                                                        correctamente 38 cafés de alta calidad.</li>
+                                                </ul>
+                                                <p>El modelo tiene un Recall moderado (49%), perdiendo cerca de la mitad
+                                                    de los cafés buenos.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Árbol de Decisión -->
+                                <div class="tab-pane fade" id="arbol" role="tabpanel">
+                                    <div class="info-box mt-4">
+                                        <h5>Modelo 2: Árbol de Decisión</h5>
+                                        <p>Modelo basado en reglas "si-entonces" que divide los datos según
+                                            características clave.</p>
+                                        <div class="row align-items-center mt-3">
+                                            <div class="col-md-6">
+                                                <img src="plots_cafe/confusion_matrix_árbol_de_decisión.png"
+                                                    alt="Matriz Confusión Árbol" class="img-fluid rounded"
+                                                    style="max-width: 400px;">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><strong>Análisis de la Matriz:</strong></p>
+                                                <ul>
+                                                    <li><strong>Verdaderos Negativos (164):</strong> Correctamente
+                                                        identificados como normales.</li>
+                                                    <li><strong>Falsos Positivos (152):</strong> ¡Muchos errores! 152
+                                                        cafés normales fueron clasificados como excelentes.</li>
+                                                    <li><strong>Falsos Negativos (31):</strong> Solo perdió 31 cafés
+                                                        buenos.</li>
+                                                    <li><strong>Verdaderos Positivos (47):</strong> Identificó 47 cafés
+                                                        de alta calidad.</li>
+                                                </ul>
+                                                <p><strong>Recall Alto (60%):</strong> Este modelo detectó la mayor
+                                                    cantidad de cafés de alta calidad, pero a costa de una precisión muy
+                                                    baja.</p>
+                                            </div>
+                                        </div>
+                                        <div class="text-center mt-3">
+                                            <img src="plots_cafe/decision_tree.png" alt="Árbol de Decisión"
+                                                class="img-fluid rounded" style="max-width: 600px;">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Random Forest -->
+                                <div class="tab-pane fade" id="rf" role="tabpanel">
+                                    <div class="info-box mt-4">
+                                        <h5>Modelo 3: Random Forest</h5>
+                                        <p>Ensamble de múltiples árboles de decisión.</p>
+                                        <div class="row align-items-center mt-3">
+                                            <div class="col-md-6">
+                                                <img src="plots_cafe/confusion_matrix_random_forest.png"
+                                                    alt="Matriz Confusión RF" class="img-fluid rounded"
+                                                    style="max-width: 400px;">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><strong>Análisis de la Matriz:</strong></p>
+                                                <ul>
+                                                    <li><strong>Verdaderos Negativos (280):</strong> Excelente filtrando
+                                                        cafés normales.</li>
+                                                    <li><strong>Falsos Positivos (36):</strong> Pocas falsas alarmas.
+                                                    </li>
+                                                    <li><strong>Falsos Negativos (54):</strong> Perdió 54 cafés buenos.
+                                                    </li>
+                                                    <li><strong>Verdaderos Positivos (24):</strong> Solo encontró 24
+                                                        cafés de alta calidad.</li>
+                                                </ul>
+                                                <p><strong>Precisión Alta, Recall Bajo:</strong> Es muy conservador;
+                                                    solo se arriesga cuando está muy seguro.</p>
+                                            </div>
+                                        </div>
+                                        <div class="mt-4 text-center">
+                                            <h5>Importancia de Variables</h5>
+                                            <p>Factores como la <strong>Altitud</strong> y el <strong>País de
+                                                    Origen</strong> dominan la predicción.</p>
+                                            <img src="plots_cafe/feature_importance_rf.png" alt="Feature Importance"
+                                                class="img-fluid rounded" style="max-width: 600px;">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Conclusiones -->
+                                <div class="tab-pane fade" id="conclusion" role="tabpanel">
+                                    <div class="info-box mt-4">
+                                        <h3>Comparación y Conclusiones</h3>
+                                        <table class="table table-bordered mt-3">
+                                            <thead class="table-dark">
+                                                <tr>
+                                                    <th>Modelo</th>
+                                                    <th>Accuracy</th>
+                                                    <th>Recall (Alta Calidad)</th>
+                                                    <th>AUC</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Regresión Logística</td>
+                                                    <td>0.71</td>
+                                                    <td>0.49</td>
+                                                    <td>0.70</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Árbol de Decisión</td>
+                                                    <td>0.54</td>
+                                                    <td><strong>0.60</strong></td>
+                                                    <td>0.61</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Random Forest</td>
+                                                    <td><strong>0.77</strong></td>
+                                                    <td>0.31</td>
+                                                    <td><strong>0.73</strong></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="text-center my-3">
+                                            <img src="plots_cafe/roc_curves_comparison.png" alt="Curvas ROC"
+                                                class="img-fluid rounded" style="max-width: 400px;">
+                                        </div>
+                                        <h5>Recomendación</h5>
+                                        <p>Para este negocio, el costo de "perder" un lote de café excepcional es alto.
+                                            Por lo tanto, se recomienda el <strong>Árbol de Decisión</strong> o una
+                                            <strong>Regresión Logística</strong> ajustada, ya que priorizan el Recall.
+                                            El Random Forest, aunque preciso, es demasiado estricto para una fase de
+                                            descubrimiento.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fase 5 -->
+                <div class="tab-pane fade" id="fase5" role="tabpanel" aria-labelledby="fase5-tab">
+                    <div class="card">
+                        <div class="card-header">Fase 5: Evaluación</div>
+                        <div class="card-body">
+                            <p>En esta fase, evaluamos el modelo no desde una perspectiva matemática, sino de
+                                <strong>impacto en el negocio</strong>. ¿Realmente nos ayuda a ahorrar dinero o
+                                encontrar mejor café?
+                            </p>
+
+                            <div class="info-box mt-4">
+                                <h3>5.1 Análisis de Ganancia (Lift Chart)</h3>
+                                <p>Este gráfico muestra cuánto mejor es el modelo comparado con elegir lotes al azar.
+                                </p>
+                                <div class="text-center">
+                                    <img src="plots_cafe/cumulative_gains.png" alt="Gráfico de Ganancia"
+                                        class="img-fluid rounded" style="max-width: 600px;">
+                                </div>
+                                <p class="mt-3"><strong>Interpretación:</strong> La curva azul (Modelo) sube mucho más
+                                    rápido que la línea punteada (Azar). Esto significa que si analizamos solo el
+                                    <strong>30%</strong> de los lotes con mayor probabilidad según el modelo,
+                                    encontraríamos casi el <strong>60%</strong> de todo el café de alta calidad
+                                    disponible. ¡Esto es una eficiencia enorme!
+                                </p>
+                            </div>
+
+                            <div class="info-box mt-4">
+                                <h3>5.2 Análisis de Rentabilidad</h3>
+                                <p>Simulación financiera: Si cada cata cuesta $50 y encontrar un lote bueno genera $500
+                                    de ganancia.</p>
+                                <div class="text-center">
+                                    <img src="plots_cafe/profit_analysis.png" alt="Análisis de Rentabilidad"
+                                        class="img-fluid rounded" style="max-width: 600px;">
+                                </div>
+                                <p class="mt-3"><strong>Conclusión:</strong> El modelo sugiere que no es rentable catar
+                                    el 100% de las muestras. El punto óptimo de beneficio se encuentra seleccionando
+                                    aproximadamente el <strong>40-50%</strong> de las muestras mejor puntuadas por el
+                                    modelo. Más allá de eso, el costo de catar supera la probabilidad de encontrar
+                                    nuevos lotes buenos.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fase 6 -->
+                <div class="tab-pane fade" id="fase6" role="tabpanel" aria-labelledby="fase6-tab">
+                    <div class="card">
+                        <div class="card-header">Fase 6: Despliegue</div>
+                        <div class="card-body">
+                            <p>El modelo es inútil si no se usa. Esta fase detalla cómo integrar la solución en el flujo
+                                de trabajo diario de los compradores de café.</p>
+
+                            <div class="accordion" id="accordionFase6">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingDep1">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#collapseDep1" aria-expanded="true"
+                                            aria-controls="collapseDep1">
+                                            6.1 Plan de Implementación
+                                        </button>
+                                    </h2>
+                                    <div id="collapseDep1" class="accordion-collapse collapse show"
+                                        aria-labelledby="headingDep1" data-bs-parent="#accordionFase6">
+                                        <div class="accordion-body">
+                                            <div class="info-box">
+                                                <h5>Herramienta "CoffeeScout"</h5>
+                                                <p>Se desarrollará una herramienta web interna:</p>
+                                                <ol>
+                                                    <li><strong>Entrada:</strong> El comprador ingresa datos básicos del
+                                                        lote (País, Altitud, Humedad, Defectos visuales) desde su móvil
+                                                        en la finca.</li>
+                                                    <li><strong>Proceso:</strong> El modelo (API en Python) calcula la
+                                                        probabilidad de "Alta Calidad".</li>
+                                                    <li><strong>Salida:</strong>
+                                                        <ul>
+                                                            <li><span class="badge bg-success">Recomendado para
+                                                                    Cata</span> (Prob > 60%)</li>
+                                                            <li><span class="badge bg-secondary">Descartar</span> (Prob
+                                                                < 60%)</li>
+                                                        </ul>
+                                                    </li>
+                                                </ol>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingDep2">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#collapseDep2"
+                                            aria-expanded="false" aria-controls="collapseDep2">
+                                            6.2 Monitoreo y Mantenimiento
+                                        </button>
+                                    </h2>
+                                    <div id="collapseDep2" class="accordion-collapse collapse"
+                                        aria-labelledby="headingDep2" data-bs-parent="#accordionFase6">
+                                        <div class="accordion-body">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Riesgo</th>
+                                                        <th>Acción</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Drift del Modelo</td>
+                                                        <td>Re-entrenar cada 6 meses con datos de nuevas cosechas.</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Cambio Climático</td>
+                                                        <td>Monitorear si la altitud óptima cambia con los años.</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Feedback</td>
+                                                        <td>Reporte mensual de aciertos vs fallos para ajustar el
+                                                            umbral.</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
