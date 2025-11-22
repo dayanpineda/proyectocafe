@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis CRISP-DM: Rotación de Empleados</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        :root {
+            --primary-color: #4a00e0; /* Violeta */
+            --secondary-color: #8e2de2; /* Azul-Violeta */
+            --text-color: #f0f2f5;
+            --bg-color: #1a1a2e;
+            --card-bg-color: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            background-image: url('https://img.freepik.com/free-vector/abstract-glowing-digital-particles-background_41981-1131.jpg?w=1380');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-color);
+        }
+
+        .main-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: rgba(15, 12, 41, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-right: 1px solid var(--primary-color);
+        }
+
+        .sidebar h2 {
+            color: var(--text-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .nav-pills .nav-link {
+            color: var(--text-color);
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            text-align: left;
+            padding: 12px 20px;
+        }
+
+        .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-pills .nav-link:hover:not(.active) {
+            background-color: var(--card-bg-color);
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 40px;
+            background: rgba(26, 26, 46, 0.7);
+            backdrop-filter: blur(5px);
+        }
+
+        .card {
+            background-color: var(--card-bg-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 15px;
+            margin-top: 0;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .card-header {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            font-weight: bold;
+            border-top-left-radius: 14px;
+            border-top-right-radius: 14px;
+            border-bottom: none;
+        }
+        
+        h1, h2, h5 {
+            color: var(--text-color);
+        }
+
+        .table {
+            color: var(--text-color);
+        }
+
+        .table-bordered {
+            border-color: var(--secondary-color);
+        }
+        
+        .card-body, .card-body p, .card-body li, .card-body h2, .card-body h3, .card-body h4 {
+            color: var(--text-color);
+        }
+
+        .info-box {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-left: 4px solid var(--secondary-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-box h3 {
+            margin-top: 0;
+            color: var(--secondary-color);
+        }
+        
+        h1, h2, h5 {
+            color: var(--text-color);
+        }
+
+        .table {
+            color: var(--text-color);
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        .table thead th {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .table-bordered {
+            border-color: var(--secondary-color);
+        }
+        
+        .table-striped>tbody>tr:nth-of-type(odd)>* {
+            --bs-table-accent-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Estilos para sub-pestañas en Fase 3 */
+        .fase3-tabs .nav-link {
+            color: var(--text-color);
+            background-color: transparent;
+            border: 1px solid transparent;
+            border-bottom-color: var(--secondary-color);
+            margin-bottom: -1px; /* Alineación con el borde del contenido */
+        }
+        .fase3-tabs .nav-link.active {
+            color: white;
+            background-color: var(--card-bg-color);
+            border-color: var(--secondary-color) var(--secondary-color) transparent;
+        }
+        .fase3-tabs .nav-link:hover {
+            border-color: var(--secondary-color) var(--secondary-color) transparent;
+        }
+        .fase3-tab-content {
+            border: 1px solid var(--secondary-color);
+            padding: 20px;
+            border-radius: 0 0 8px 8px;
+        }
+
+        pre {
+            background-color: rgba(0,0,0,0.3) !important;
+            color: #eee;
+            border: 1px solid var(--secondary-color);
+        }
+
+        img {
+            border: 2px solid var(--secondary-color);
+            box-shadow: 0 0 15px var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Menú Vertical Izquierdo -->
+        <div class="sidebar">
+            <h2>Menú CRISP-DM</h2>
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <button class="nav-link active" id="inicio-tab" data-bs-toggle="pill" data-bs-target="#inicio" type="button" role="tab" aria-controls="inicio" aria-selected="true">Inicio (EDA)</button>
+                <button class="nav-link" id="fase1-tab" data-bs-toggle="pill" data-bs-target="#fase1" type="button" role="tab" aria-controls="fase1" aria-selected="false">Fase 1: Comprensión del Negocio</button>
+                <button class="nav-link" id="fase2-tab" data-bs-toggle="pill" data-bs-target="#fase2" type="button" role="tab" aria-controls="fase2" aria-selected="false">Fase 2: Comprensión de los Datos</button>
+                <button class="nav-link" id="fase3-tab" data-bs-toggle="pill" data-bs-target="#fase3" type="button" role="tab" aria-controls="fase3" aria-selected="false">Fase 3: Preparación de los Datos</button>
+                <button class="nav-link" id="fase4-tab" data-bs-toggle="pill" data-bs-target="#fase4" type="button" role="tab" aria-controls="fase4" aria-selected="false">Fase 4: Modelado</button>
+            </div>
+        </div>
+
+        <!-- Contenido Principal Derecho -->
+        <div class="content">
+            <h1 class="text-center mb-4">Análisis de Rotación de Empleados</h1>
+            <div class="tab-content" id="v-pills-tabContent">
+                <!-- Pestaña Inicio (EDA) -->
+                <div class="tab-pane fade show active" id="inicio" role="tabpanel" aria-labelledby="inicio-tab">
+                    <div class="card">
+                        <div class="card-header">Dashboard de Análisis de Rotación</div>
+                        <div class="card-body">
+                            <!-- Key Metrics -->
+                            <div class="row mb-4">
+                                <div class="col-md-3">
+                                    <div class="card text-white bg-primary mb-3">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">Total de Empleados</h5>
+                                            <p class="card-text fs-4">1470</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card text-white bg-danger mb-3">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">Tasa de Rotación</h5>
+                                            <p class="card-text fs-4">16.12%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card text-white bg-info mb-3">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">Edad Promedio</h5>
+                                            <p class="card-text fs-4">36.92</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card text-white bg-success mb-3">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">Ingreso Mensual Promedio</h5>
+                                            <p class="card-text fs-4">$6,502.93</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Charts -->
+                            <div class="row text-center g-4">
+                                <div class="col-md-6">
+                                    <h5>Distribución de Rotación (Attrition)</h5>
+                                    <img src="plots/attrition_distribution.png" alt="Distribución de Attrition" class="img-fluid rounded" style="max-width: 400px;">
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Distribución de Edad</h5>
+                                    <img src="plots/age_distribution.png" alt="Distribución de Edad" class="img-fluid rounded" style="max-width: 400px;">
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Satisfacción Laboral vs. Renuncia</h5>
+                                    <img src="plots/satisfaction_vs_attrition.png" alt="Satisfacción Laboral vs. Renuncia" class="img-fluid rounded" style="max-width: 400px;">
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Distribución por Género</h5>
+                                    <img src="plots/gender_distribution.png" alt="Distribución por Género" class="img-fluid rounded" style="max-width: 400px;">
+                                </div>
+                                <div class="col-lg-12">
+                                    <h5>Distribución de Ingreso Mensual</h5>
+                                    <img src="plots/monthly_income_distribution.png" alt="Distribución de Ingreso Mensual" class="img-fluid rounded" style="max-width: 400px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="fase1" role="tabpanel" aria-labelledby="fase1-tab">
+                    <div class="card">
+                        <div class="card-header">Fase 1: Comprensión del Negocio</div>
+                        <div class="card-body">
+                            <p>Esta fase inicial es crucial para alinear el proyecto de minería de datos con las metas de la organización. Se centra en entender el problema desde una perspectiva de negocio antes de sumergirse en los datos.</p>
+
+                            <div class="accordion" id="accordionFase1">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingOne">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            1.1 Objetivos del Negocio
+                                        </button>
+                                    </h2>
+                                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionFase1">
+                                        <div class="accordion-body">
+                                            <p>El objetivo principal de la empresa es <strong>reducir la tasa de rotación de empleados (attrition)</strong>. La pérdida de talento no solo implica costos directos de reclutamiento y capacitación, sino que también afecta la moral del equipo, la continuidad del conocimiento y la productividad general.</p>
+                                            <ul>
+                                                <li><strong>Objetivo Primario:</strong> Disminuir la rotación voluntaria en un 15% durante el próximo año fiscal.</li>
+                                                <li><strong>Objetivos Secundarios:</strong>
+                                                    <ul>
+                                                        <li>Mejorar la satisfacción y el clima laboral.</li>
+                                                        <li>Optimizar los procesos de gestión de recursos humanos.</li>
+                                                        <li>Aumentar la retención de empleados con alto desempeño.</li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingTwo">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                            1.2 Evaluación de la Situación
+                                        </button>
+                                    </h2>
+                                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionFase1">
+                                        <div class="accordion-body">
+                                            <p>Se realiza un inventario de recursos, riesgos, y un análisis costo-beneficio.</p>
+                                            <ul>
+                                                <li><strong>Recursos:</strong> Se cuenta con un dataset histórico de 1470 empleados y 35 variables, además de las herramientas de software (Python y sus librerías) y el personal técnico para el análisis.</li>
+                                                <li><strong>Riesgos:</strong> El dataset podría carecer de variables cruciales no registradas (ej. calidad de la gestión directa, conflictos interpersonales). Las conclusiones estarán limitadas a los datos disponibles.</li>
+                                                <li><strong>Análisis Costo-Beneficio:</strong>
+                                                    <ul>
+                                                        <li><strong>Costos:</strong> Horas de análisis, tiempo del personal de RRHH para validar hallazgos e implementar soluciones.</li>
+                                                        <li><strong>Beneficios:</strong> Un ahorro sustancial. Se estima que el costo de reemplazar a un empleado puede ser entre el 50% y 200% de su salario anual. Una pequeña reducción en la rotación puede justificar con creces la inversión en este análisis.</li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingThree">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                            1.3 Objetivos de Minería de Datos
+                                        </button>
+                                    </h2>
+                                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionFase1">
+                                        <div class="accordion-body">
+                                            <p>Se traducen los objetivos de negocio a metas técnicas y medibles.</p>
+                                            <ul>
+                                                <li><strong>Objetivo Técnico Principal:</strong> Construir un modelo de clasificación que prediga si un empleado renunciará (<code>Attrition = Yes</code>) o no.
+                                                    <ul>
+                                                        <li><strong>Criterio de Éxito:</strong> El modelo debe alcanzar una precisión (Accuracy) global superior al 85% y, más importante aún, una sensibilidad (Recall) para la clase 'Yes' de al menos el 70%. Esto asegura que identificamos a la mayoría de los empleados en riesgo.</li>
+                                                    </ul>
+                                                </li>
+                                                <li><strong>Objetivo Técnico Secundario:</strong> Identificar y clasificar en orden de importancia los 5 a 7 factores principales que más influyen en la renuncia de los empleados.</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="fase2" role="tabpanel" aria-labelledby="fase2-tab">
+                    <div class="card">
+                        <div class="card-header">Fase 2: Comprensión de los Datos</div>
+                        <div class="card-body">
+                            <p>En esta fase, realizamos una primera inmersión en los datos. El objetivo es familiarizarnos con su estructura, contenido, calidad y formular las primeras hipótesis sobre las relaciones entre las variables.</p>
+
+                            <div class="info-box mt-4">
+                                <h3>2.1 Recolección y Descripción Inicial</h3>
+                                <ul>
+                                    <li><strong>Fuente de Datos:</strong> La información proviene del archivo <code>WA_Fn-UseC_-HR-Employee-Attrition (1).csv</code>.</li>
+                                    <li><strong>Dimensiones:</strong> El conjunto de datos consta de <strong>1470 registros</strong> (empleados) y <strong>35 características</strong> (columnas).</li>
+                                    <li><strong>Tipos de Datos:</strong> Como se vio en el EDA, los datos son una mezcla de variables numéricas (ej. <code>Age</code>, <code>MonthlyIncome</code>) y categóricas (ej. <code>Department</code>, <code>Gender</code>).</li>
+                                </ul>
+                            </div>
+
+                            <div class="info-box">
+                                <h3>2.2 Hipótesis Iniciales sobre Variables Clave</h3>
+                                <p>Basándonos en el conocimiento del problema, podemos formular algunas hipótesis iniciales sobre qué factores podrían influir en la rotación de empleados. Estas hipótesis guiarán nuestro análisis más profundo.</p>
+                                <table class="table table-bordered mt-3">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th class="text-white">Columna</th>
+                                            <th class="text-white">¿Cómo podría ayudar a predecir la renuncia?</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><code>Age</code></td>
+                                            <td>Las personas más jóvenes podrían tener una mayor tendencia a rotar en busca de nuevas oportunidades.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>MonthlyIncome</code></td>
+                                            <td>Salarios percibidos como bajos pueden ser un fuerte incentivo para buscar empleo en otro lugar.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>BusinessTravel</code></td>
+                                            <td>La frecuencia alta de viajes de negocio puede generar desgaste y desequilibrio con la vida personal.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>JobSatisfaction</code></td>
+                                            <td>Una baja satisfacción laboral es un indicador directo de descontento, lo que podría llevar a la renuncia.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>OverTime</code></td>
+                                            <td>El exceso de horas extra de forma recurrente puede causar agotamiento (burnout) y motivar la salida.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <p class="mt-3">Las visualizaciones en la pestaña <strong>Inicio (EDA)</strong>, como la de "Satisfacción Laboral vs. Renuncia", ya nos permiten empezar a validar estas ideas.</p>
+                            </div>
+
+                            <div class="info-box">
+                                <h3>2.3 Verificación de la Calidad de los Datos</h3>
+                                <ul>
+                                    <li><strong>Valores Nulos:</strong> Un hallazgo muy positivo es que el dataset está completo; <strong>no se encontraron valores nulos</strong> en ninguna columna. Esto simplificará enormemente la siguiente fase de preparación de datos.</li>
+                                    <li><strong>Consistencia:</strong> En una revisión preliminar, los valores de las columnas parecen consistentes y dentro de rangos lógicos. Por ejemplo, la columna <code>StandardHours</code> tiene un valor constante de 80 para todos los empleados, lo que indica que podría no ser una variable útil para el modelo, algo a confirmar en la siguiente fase.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="fase3" role="tabpanel" aria-labelledby="fase3-tab">
+                    <div class="card">
+                        <div class="card-header">Fase 3: Preparación de los Datos</div>
+                        <div class="card-body">
+                            <p>Esta es la fase más intensiva y crucial. Aquí se limpian y transforman los datos brutos para que puedan ser utilizados por los algoritmos de machine learning. Un modelo es tan bueno como los datos con los que se entrena.</p>
+                            
+                            <!-- Sub-pestañas de la Fase 3 -->
+                            <ul class="nav nav-tabs fase3-tabs mt-4" id="fase3Tab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="diccionario-tab" data-bs-toggle="tab" data-bs-target="#diccionario" type="button" role="tab" aria-controls="diccionario" aria-selected="true">Diccionario de Variables</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="sin-senal-tab" data-bs-toggle="tab" data-bs-target="#sin-senal" type="button" role="tab" aria-controls="sin-senal" aria-selected="false">Variables sin Señal</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="checklist-tab" data-bs-toggle="tab" data-bs-target="#checklist" type="button" role="tab" aria-controls="checklist" aria-selected="false">Checklist de Preparación</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="categoricas-tab" data-bs-toggle="tab" data-bs-target="#categoricas" type="button" role="tab" aria-controls="categoricas" aria-selected="false">Variables Categóricas</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="simetria-tab" data-bs-toggle="tab" data-bs-target="#simetria" type="button" role="tab" aria-controls="simetria" aria-selected="false">Análisis de Simetría</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="dataset-final-tab" data-bs-toggle="tab" data-bs-target="#dataset-final" type="button" role="tab" aria-controls="dataset-final" aria-selected="false">Dataset Final</button>
+                                </li>
+                            </ul>
+
+                            <!-- Contenido de las sub-pestañas -->
+                            <div class="tab-content fase3-tab-content" id="fase3TabContent">
+                                <!-- Pestaña: Diccionario de Variables -->
+                                <div class="tab-pane fade show active" id="diccionario" role="tabpanel" aria-labelledby="diccionario-tab">
+                                    <h4 class="mt-3">Diccionario de Variables</h4>
+                                    <p>A continuación se detallan las variables del dataset:</p>
+                                    <div class="table-responsive" style="max-height: 400px;">
+                                        <table class="table table-sm table-striped">
+                                            <thead><tr><th class="text-white">Variable Original</th><th class="text-white">Nombre en Español</th><th class="text-white">Definición</th></tr></thead>
+                                            <tbody>
+                                                <tr><td>Age</td><td>Edad</td><td>Edad del empleado.</td></tr>
+                                                <tr><td>Attrition</td><td>Renuncia</td><td>Si el empleado renunció (Yes) o no (No).</td></tr>
+                                                <tr><td>BusinessTravel</td><td>Frecuencia de Viajes</td><td>Con qué frecuencia viaja el empleado por negocios.</td></tr>
+                                                <tr><td>DailyRate</td><td>Tarifa Diaria</td><td>Tarifa salarial por día.</td></tr>
+                                                <tr><td>Department</td><td>Departamento</td><td>Departamento del empleado.</td></tr>
+                                                <tr><td>DistanceFromHome</td><td>Distancia Casa-Trabajo</td><td>Distancia en km desde el hogar al trabajo.</td></tr>
+                                                <tr><td>Education</td><td>Nivel Educativo</td><td>Nivel de educación (1 'Bajo' a 5 'Doctorado').</td></tr>
+                                                <tr><td>EducationField</td><td>Campo de Estudio</td><td>Campo de estudio del empleado.</td></tr>
+                                                <tr><td>EmployeeCount</td><td>Conteo de Empleados</td><td>Siempre es 1.</td></tr>
+                                                <tr><td>EmployeeNumber</td><td>Número de Empleado</td><td>Identificador único del empleado.</td></tr>
+                                                <tr><td>EnvironmentSatisfaction</td><td>Satisfacción Ambiental</td><td>Nivel de satisfacción con el ambiente de trabajo.</td></tr>
+                                                <tr><td>Gender</td><td>Género</td><td>Género del empleado.</td></tr>
+                                                <tr><td>HourlyRate</td><td>Tarifa por Hora</td><td>Tarifa salarial por hora.</td></tr>
+                                                <tr><td>JobInvolvement</td><td>Implicación Laboral</td><td>Nivel de implicación en el trabajo.</td></tr>
+                                                <tr><td>JobLevel</td><td>Nivel del Puesto</td><td>Nivel jerárquico del puesto (1 a 5).</td></tr>
+                                                <tr><td>JobRole</td><td>Rol Laboral</td><td>Rol o cargo específico del empleado.</td></tr>
+                                                <tr><td>JobSatisfaction</td><td>Satisfacción Laboral</td><td>Nivel de satisfacción con el trabajo.</td></tr>
+                                                <tr><td>MaritalStatus</td><td>Estado Civil</td><td>Estado civil del empleado.</td></tr>
+                                                <tr><td>MonthlyIncome</td><td>Ingreso Mensual</td><td>Ingreso mensual del empleado.</td></tr>
+                                                <tr><td>MonthlyRate</td><td>Tarifa Mensual</td><td>Tarifa mensual (no confundir con salario).</td></tr>
+                                                <tr><td>NumCompaniesWorked</td><td>Nº Empresas Anteriores</td><td>Número de empresas en las que ha trabajado antes.</td></tr>
+                                                <tr><td>Over18</td><td>Mayor de 18</td><td>Si el empleado es mayor de 18 años (siempre 'Y').</td></tr>
+                                                <tr><td>OverTime</td><td>Horas Extra</td><td>Si el empleado trabaja horas extra (Yes/No).</td></tr>
+                                                <tr><td>PercentSalaryHike</td><td>% Aumento Salarial</td><td>Porcentaje de aumento salarial del último año.</td></tr>
+                                                <tr><td>PerformanceRating</td><td>Calificación de Desempeño</td><td>Calificación del desempeño del empleado.</td></tr>
+                                                <tr><td>RelationshipSatisfaction</td><td>Satisfacción Relaciones</td><td>Nivel de satisfacción con las relaciones interpersonales.</td></tr>
+                                                <tr><td>StandardHours</td><td>Horas Estándar</td><td>Horas de trabajo estándar (siempre 80).</td></tr>
+                                                <tr><td>StockOptionLevel</td><td>Nivel de Opciones sobre Acciones</td><td>Nivel de opciones sobre acciones de la empresa.</td></tr>
+                                                <tr><td>TotalWorkingYears</td><td>Años de Experiencia Total</td><td>Años totales de experiencia laboral.</td></tr>
+                                                <tr><td>TrainingTimesLastYear</td><td>Horas Formación (Año Pasado)</td><td>Número de cursos de formación el último año.</td></tr>
+                                                <tr><td>WorkLifeBalance</td><td>Equilibrio Vida-Trabajo</td><td>Nivel de equilibrio entre vida personal y laboral.</td></tr>
+                                                <tr><td>YearsAtCompany</td><td>Años en la Empresa</td><td>Años que el empleado lleva en la empresa actual.</td></tr>
+                                                <tr><td>YearsInCurrentRole</td><td>Años en el Rol Actual</td><td>Años en el puesto de trabajo actual.</td></tr>
+                                                <tr><td>YearsSinceLastPromotion</td><td>Años desde Última Promoción</td><td>Años desde la última promoción.</td></tr>
+                                                <tr><td>YearsWithCurrManager</td><td>Años con Manager Actual</td><td>Años con el mismo manager.</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- Pestaña: Variables sin Señal -->
+                                <div class="tab-pane fade" id="sin-senal" role="tabpanel" aria-labelledby="sin-senal-tab">
+                                    <h4 class="mt-3">Eliminación de Variables sin Señal</h4>
+                                    <p>Algunas variables no aportan información útil para un modelo de predicción porque no varían entre los empleados. Estas columnas serán eliminadas.</p>
+                                    <table class="table table-bordered mt-3">
+                                        <thead class="table-dark"><tr><th class="text-white">Variable</th><th class="text-white">Razón para Eliminar</th></tr></thead>
+                                        <tbody>
+                                            <tr><td><code>EmployeeCount</code></td><td>El valor es constante (1) para todos los registros. No tiene poder predictivo.</td></tr>
+                                            <tr><td><code>StandardHours</code></td><td>El valor es constante (80) para todos los registros. No permite diferenciar empleados.</td></tr>
+                                            <tr><td><code>Over18</code></td><td>El valor es constante ('Y') para todos los registros. No aporta información.</td></tr>
+                                            <tr><td><code>EmployeeNumber</code></td><td>Es un identificador único. No contiene información generalizable para predecir la renuncia en futuros empleados.</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- Pestaña: Checklist de Preparación -->
+                                <div class="tab-pane fade" id="checklist" role="tabpanel" aria-labelledby="checklist-tab">
+                                    <div class="checklist-container">
+                                        <!-- Sub-menú vertical del checklist -->
+                                        <div class="nav flex-column nav-pills checklist-nav" id="v-pills-checklist-tab" role="tablist" aria-orientation="vertical">
+                                            <button class="nav-link active" id="v-pills-limpieza-tab" data-bs-toggle="pill" data-bs-target="#v-pills-limpieza" type="button" role="tab" aria-controls="v-pills-limpieza" aria-selected="true">1. Limpieza y Eliminación</button>
+                                            <button class="nav-link" id="v-pills-feature-tab" data-bs-toggle="pill" data-bs-target="#v-pills-feature" type="button" role="tab" aria-controls="v-pills-feature" aria-selected="false">2. Feature Engineering</button>
+                                            <button class="nav-link" id="v-pills-balanceo-tab" data-bs-toggle="pill" data-bs-target="#v-pills-balanceo" type="button" role="tab" aria-controls="v-pills-balanceo" aria-selected="false">3. Balanceo (SMOTE)</button>
+                                            <button class="nav-link" id="v-pills-escalamiento-tab" data-bs-toggle="pill" data-bs-target="#v-pills-escalamiento" type="button" role="tab" aria-controls="v-pills-escalamiento" aria-selected="false">4. Escalamiento</button>
+                                        </div>
+                                        <!-- Contenido del sub-menú -->
+                                        <div class="tab-content checklist-content" id="v-pills-checklist-tabContent">
+                                            <div class="tab-pane fade show active" id="v-pills-limpieza" role="tabpanel">
+                                                <h5>Paso 1: Limpieza y Eliminación de Variables</h5>
+                                                <p>La primera acción es simplificar el dataset.</p>
+                                                <ul>
+                                                    <li><strong>Datos Nulos:</strong> Se confirma que no existen valores nulos, por lo que no es necesario aplicar técnicas de imputación.</li>
+                                                    <li><strong>Eliminación de Variables:</strong> Se eliminan las columnas que no aportan valor predictivo, como se identificó en la pestaña "Variables sin Señal". Esto reduce el ruido y la complejidad del modelo.</li>
+                                                </ul>
+                                            </div>
+                                            <div class="tab-pane fade" id="v-pills-feature" role="tabpanel">
+                                                <h5>Paso 2: Feature Engineering</h5>
+                                                <p>Se crean nuevas variables (features) a partir de las existentes para intentar capturar relaciones más complejas que ayuden al modelo.</p>
+                                                <p><strong>Ejemplo:</strong> Crear una variable "Ingreso por Año de Experiencia".</p>
+                                                <table class="table table-sm">
+                                                    <thead><tr><th class="text-white">Ingreso Mensual</th><th class="text-white">Años Exp.</th><th class="text-white">Ingreso / Año Exp.</th></tr></thead>
+                                                    <tbody>
+                                                        <tr><td>5993</td><td>8</td><td>749.1</td></tr>
+                                                        <tr><td>5130</td><td>10</td><td>513.0</td></tr>
+                                                        <tr><td>2909</td><td>8</td><td>363.6</td></tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="tab-pane fade" id="v-pills-balanceo" role="tabpanel">
+                                                <h5>Paso 3: Balanceo de Datos con SMOTE (70-30)</h5>
+                                                <p>El dataset está desbalanceado (84% 'No' vs 16% 'Yes'). Para evitar que el modelo se vuelva sesgado hacia la clase mayoritaria, se usa SMOTE.</p>
+                                                <p><strong>Antes del Balanceo:</strong></p>
+                                                <ul><li>Clase 'No' (Mayoritaria): 1233 registros</li><li>Clase 'Yes' (Minoritaria): 237 registros</li></ul>
+                                                <p><strong>Después de SMOTE (Conceptual con balanceo 70-30):</strong></p>
+                                                <ul><li>Clase 'No': 1233 registros</li><li>Clase 'Yes': 370 registros (237 originales + 133 sintéticos)</li></ul>
+                                            </div>
+                                            <div class="tab-pane fade" id="v-pills-escalamiento" role="tabpanel">
+                                                <h5>Paso 4: Escalamiento de Datos</h5>
+                                                <p>Se estandarizan las variables numéricas para que tengan una media de 0 y una desviación estándar de 1. Esto es crucial para algoritmos sensibles a la escala de los datos.</p>
+                                                <p><strong>Ejemplo con StandardScaler:</strong></p>
+                                                <table class="table table-sm">
+                                                    <thead><tr><th class="text-white">Variable</th><th class="text-white">Valor Original</th><th class="text-white">Valor Escalado</th></tr></thead>
+                                                    <tbody>
+                                                        <tr><td>Age</td><td>41</td><td>0.44</td></tr>
+                                                        <tr><td>MonthlyIncome</td><td>5993</td><td>-0.10</td></tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Pestaña: Variables Categóricas -->
+                                <div class="tab-pane fade" id="categoricas" role="tabpanel" aria-labelledby="categoricas-tab">
+                                    <h4 class="mt-3">Codificación de Variables Categóricas</h4>
+    
+                                    <div class="info-box mt-4">
+                                        <h5>Estrategia de Codificación</h5>
+                                        <p>Se utilizan dos técnicas para convertir texto a números:</p>
+                                        <ul>
+                                            <li><strong>Label Encoding:</strong> Para variables binarias (con solo dos categorías), asignando valores de 0 y 1. Se aplica a <code>Attrition</code>, <code>Gender</code> y <code>OverTime</code>.</li>
+                                            <li><strong>One-Hot Encoding:</strong> Para variables con más de dos categorías, creando columnas "dummy" para evitar que el modelo asuma un orden inexistente. Se aplica a variables como <code>BusinessTravel</code>, <code>Department</code>, <code>JobRole</code>, etc.</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="info-box">
+                                        <h5>Consecuencias: Cambio de Dimensionalidad</h5>
+                                        <p>La codificación expande el dataset. De 31 columnas útiles, el proceso de One-Hot Encoding genera un total de <strong>114 columnas</strong> finales, que se usarán para entrenar los modelos.</p>
+                                    </div>
+                                </div>
+                                <!-- Pestaña: Análisis de Simetría y Datos Atípicos -->
+                                <div class="tab-pane fade" id="simetria" role="tabpanel" aria-labelledby="simetria-tab">
+                                    <h4 class="mt-3">Análisis de Distribución, Simetría y Datos Atípicos</h4>
+                                    <p>Se analizan las distribuciones de las variables numéricas más importantes para detectar asimetrías (skewness) y valores atípicos (outliers), ya que pueden influir negativamente en el rendimiento de algunos modelos.</p>
+                                    
+                                    <div class="info-box mt-4">
+                                        <h5>Hallazgos Clave:</h5>
+                                        <ul>
+                                            <li><strong>MonthlyIncome (Ingreso Mensual):</strong> Muestra una fuerte <strong>asimetría positiva</strong> (cola larga hacia la derecha). La mayoría de los empleados se concentran en salarios más bajos, y hay unos pocos con salarios muy altos que se consideran datos atípicos.</li>
+                                            <li><strong>TotalWorkingYears (Años de Experiencia):</strong> También presenta asimetría positiva y varios datos atípicos, indicando empleados con una vasta trayectoria profesional en comparación con la media.</li>
+                                            <li><strong>YearsAtCompany (Años en la Empresa):</strong> Similar a las anteriores, con asimetría positiva y outliers que representan a empleados con mucha antigüedad.</li>
+                                            <li><strong>Age (Edad):</strong> Es la variable más simétrica, con una distribución que se asemeja a una normal, aunque ligeramente sesgada a la derecha. Apenas presenta datos atípicos.</li>
+                                        </ul>
+                                        <p><strong>Conclusión:</strong> La presencia de asimetría y outliers, especialmente en variables de ingresos y antigüedad, sugiere que podría ser beneficioso aplicar transformaciones (como la logarítmica) antes de entrenar ciertos tipos de modelos.</p>
+                                    </div>
+
+                                    <div class="row text-center g-4 mt-3">
+                                        <div class="col-12">
+                                            <img src="plots/distribution_analysis_MonthlyIncome.png" alt="Análisis de Ingreso Mensual" class="img-fluid rounded" style="max-width: 600px;">
+                                        </div>
+                                        <div class="col-12">
+                                            <img src="plots/distribution_analysis_TotalWorkingYears.png" alt="Análisis de Años de Experiencia" class="img-fluid rounded" style="max-width: 600px;">
+                                        </div>
+                                        <div class="col-12">
+                                            <img src="plots/distribution_analysis_YearsAtCompany.png" alt="Análisis de Años en la Empresa" class="img-fluid rounded" style="max-width: 600px;">
+                                        </div>
+                                        <div class="col-12">
+                                            <img src="plots/distribution_analysis_Age.png" alt="Análisis de Edad" class="img-fluid rounded" style="max-width: 600px;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Pestaña: Dataset Final -->
+                                <div class="tab-pane fade" id="dataset-final" role="tabpanel" aria-labelledby="dataset-final-tab">
+                                    <h4 class="mt-3">Dataset Final para Modelado</h4>
+                                    <div class="info-box mt-4">
+                                        <h5>Descarga del Conjunto de Datos Procesado</h5>
+                                        <p>Después de completar todos los pasos de la preparación de datos (limpieza, codificación a 114 columnas y selección conceptual de variables), se ha generado un archivo CSV final. Este archivo es el que se utilizará como entrada para la fase de modelado.</p>
+                                        <p>El dataset contiene <strong>1470 filas</strong> y <strong>114 columnas</strong>, listas para ser utilizadas por los algoritmos de Machine Learning.</p>
+                                        <a href="dataset_procesado.csv" class="btn btn-primary mt-3" download>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                                            </svg>
+                                            Descargar dataset_procesado.csv
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="fase4" role="tabpanel" aria-labelledby="fase4-tab">
+                    <div class="card">
+                        <div class="card-header">Fase 4: Modelado</div>
+                        <div class="card-body">
+                            <p>En esta fase, utilizamos el dataset procesado para construir y evaluar modelos predictivos. El objetivo es crear un modelo que pueda predecir la probabilidad de que un empleado renuncie, basándose en sus características.</p>
+                            
+                            <!-- Sub-pestañas de la Fase 4 -->
+                            <ul class="nav nav-tabs fase3-tabs mt-4" id="fase4Tab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="logistica-tab" data-bs-toggle="tab" data-bs-target="#logistica" type="button" role="tab" aria-controls="logistica" aria-selected="true">Regresión Logística</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="arbol-tab" data-bs-toggle="tab" data-bs-target="#arbol" type="button" role="tab" aria-controls="arbol" aria-selected="false">Árbol de Decisión</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="rf-tab" data-bs-toggle="tab" data-bs-target="#rf" type="button" role="tab" aria-controls="rf" aria-selected="false">Random Forest</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="conclusion-tab" data-bs-toggle="tab" data-bs-target="#conclusion" type="button" role="tab" aria-controls="conclusion" aria-selected="false">Conclusiones</button>
+                                </li>
+                            </ul>
+
+                            <!-- Contenido de las sub-pestañas de la Fase 4 -->
+                            <div class="tab-content fase3-tab-content" id="fase4TabContent">
+                                <!-- Pestaña: Regresión Logística -->
+                                <div class="tab-pane fade show active" id="logistica" role="tabpanel" aria-labelledby="logistica-tab">
+                                    <div class="info-box mt-4">
+                                        <h5>Modelo 1: Regresión Logística</h5>
+                                        <p><strong>¿Cómo funciona?</strong> Es un modelo estadístico que, a pesar de su nombre, se usa para clasificación. Calcula la probabilidad de que un evento ocurra (p. ej., que un empleado renuncie) basándose en una combinación de las variables de entrada. Es muy interpretable y eficiente.</p>
+                                        <div class="row align-items-center mt-3">
+                                            <div class="col-md-6">
+                                                <p><strong>Matriz de Confusión:</strong></p>
+                                                <img src="plots/confusion_matrix_regresión_logística.png" alt="Matriz de Confusión - Regresión Logística" class="img-fluid rounded" style="max-width: 400px;">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><strong>Análisis de la Matriz:</strong></p>
+                                                <ul>
+                                                    <li><strong>Verdaderos Negativos (206):</strong> Predijo correctamente que 206 empleados <strong>no renunciarían</strong>.</li>
+                                                    <li><strong>Verdaderos Positivos (33):</strong> Predijo correctamente que 33 empleados <strong>sí renunciarían</strong>.</li>
+                                                    <li><strong>Falsos Positivos (41):</strong> Predijo incorrectamente que 41 empleados renunciarían, cuando en realidad no lo hicieron (falsas alarmas).</li>
+                                                    <li><strong>Falsos Negativos (14):</strong> Predijo incorrectamente que 14 empleados no renunciarían, pero sí lo hicieron. <strong>Este es el error más costoso para el negocio.</strong></li>
+                                                </ul>
+                                                <p>Este modelo tiene un buen desempeño identificando a los que renuncian (alto Recall), a costa de generar un número considerable de falsas alarmas.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Pestaña: Árbol de Decisión -->
+                                <div class="tab-pane fade" id="arbol" role="tabpanel" aria-labelledby="arbol-tab">
+                                    <div class="info-box mt-4">
+                                        <h5>Modelo 2: Árbol de Decisión (Profundidad Máx. = 4)</h5>
+                                        <p><strong>¿Cómo funciona?</strong> Crea un modelo similar a un diagrama de flujo, donde cada "nodo" representa una pregunta sobre una variable y cada "rama" una respuesta. El árbol se recorre hasta llegar a una "hoja" que contiene la predicción final.</p>
+                                        <div class="row align-items-center mt-3">
+                                            <div class="col-md-6">
+                                                <p><strong>Matriz de Confusión:</strong></p>
+                                                <img src="plots/confusion_matrix_árbol_de_decisión.png" alt="Matriz de Confusión - Árbol de Decisión" class="img-fluid rounded" style="max-width: 400px;">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><strong>Análisis de la Matriz:</strong></p>
+                                                <ul>
+                                                    <li><strong>Verdaderos Positivos (24):</strong> Identificó correctamente a 24 empleados que renunciaron.</li>
+                                                    <li><strong>Falsos Negativos (23):</strong> No logró identificar a 23 empleados que sí renunciaron. Su capacidad para detectar renuncias es moderada.</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="mt-4">
+                                            <p class="text-center"><strong>Interpretación del Árbol de Decisión</strong></p>
+                                            <p>Este diagrama es la "mente" del modelo y nos permite entender su lógica. Se lee de arriba hacia abajo:</p>
+                                            <ul>
+                                                <li><strong>Nodo Raíz (arriba del todo):</strong> La primera pregunta que se hace el modelo es sobre la variable <code>OverTime_Yes <= 0.5</code>. En español: <strong>"¿El empleado trabaja horas extra?"</strong>. Si la respuesta es no (True, va a la izquierda), el riesgo de renuncia es bajo. Si es sí (False, va a la derecha), el riesgo aumenta significativamente.</li>
+                                                <li><strong>Nodos Intermedios:</strong> El modelo sigue haciendo preguntas para refinar su predicción. Por ejemplo, para alguien que SÍ trabaja horas extra, la siguiente pregunta podría ser <code>JobLevel_1 <= 0.5</code>, que significa: <strong>"¿El empleado tiene un nivel de puesto superior al de entrada (Nivel 1)?"</strong>.</li>
+                                                <li><strong>Hojas (nodos finales):</strong> Contienen la predicción. Las hojas de color naranja oscuro indican una alta probabilidad de renuncia, mientras que las azules indican una baja probabilidad.</li>
+                                            </ul>
+                                            <p>Para una exposición, se puede seguir una ruta: "Como vemos, si un empleado trabaja horas extra (rama derecha) y además tiene un nivel de puesto bajo (rama izquierda), el modelo lo clasifica como un alto riesgo de renuncia".</p>
+                                            <div class="text-center mt-3">
+                                                <img src="plots/decision_tree.png" alt="Árbol de Decisión" class="img-fluid rounded" style="max-width: 600px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Pestaña: Random Forest -->
+                                <div class="tab-pane fade" id="rf" role="tabpanel" aria-labelledby="rf-tab">
+                                    <div class="info-box mt-4">
+                                        <h5>Modelo 3: Random Forest</h5>
+                                        <p><strong>¿Cómo funciona?</strong> Es un modelo de "ensamble" que construye cientos de árboles de decisión. Para hacer una predicción, recoge la predicción de cada árbol y elige la respuesta más votada. Es como consultar a un "comité de árboles expertos".</p>
+                                        <div class="row align-items-center mt-3">
+                                            <div class="col-md-6">
+                                                <p><strong>Matriz de Confusión:</strong></p>
+                                                <img src="plots/confusion_matrix_random_forest.png" alt="Matriz de Confusión - Random Forest" class="img-fluid rounded" style="max-width: 400px;">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><strong>Análisis de la Matriz:</strong></p>
+                                                <ul>
+                                                    <li><strong>Verdaderos Negativos (245):</strong> Es excelente para identificar a los empleados que se quedan.</li>
+                                                    <li><strong>Verdaderos Positivos (10):</strong> Identificó correctamente solo a 10 empleados que renunciaron.</li>
+                                                    <li><strong>Falsos Negativos (37):</strong> No logró identificar a 37 empleados que sí renunciaron. <strong>Su Recall es muy bajo.</strong></li>
+                                                </ul>
+                                                <p>Este modelo es muy preciso en general, pero falla en el objetivo principal de identificar a los empleados en riesgo de irse.</p>
+                                            </div>
+                                        </div>
+                                        <div class="mt-4 text-center">
+                                            <p><strong>Importancia de las Variables (Factores Clave)</strong></p>
+                                            <p>Este gráfico es uno de los resultados más valiosos para el negocio. Nos dice qué factores considera el modelo más importantes para predecir una renuncia. Para una exposición, podemos explicarlo así:</p>
+                                            <p>"El modelo nos confirma que el factor más decisivo es, con diferencia, el <strong>Ingreso Mensual (MonthlyIncome)</strong>. Esto sugiere que la compensación es un punto crítico. Le siguen de cerca si el empleado hace <strong>Horas Extra (OverTime_Yes)</strong>, su <strong>Edad (Age)</strong>, y sus <strong>Años de Experiencia Total (TotalWorkingYears)</strong>. Estos son los 4 factores en los que RRHH debería enfocarse prioritariamente para desarrollar estrategias de retención."</p>
+                                            <img src="plots/feature_importance_rf.png" alt="Importancia de Variables - Random Forest" class="img-fluid rounded" style="max-width: 600px;">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Pestaña: Conclusiones -->
+                                <div class="tab-pane fade" id="conclusion" role="tabpanel" aria-labelledby="conclusion-tab">
+                                    <div class="info-box mt-4">
+                                        <h3>4.3 Comparación de Modelos y Conclusiones</h3>
+                                        <h5>Tabla Comparativa de Métricas</h5>
+                                        <table class="table table-bordered mt-3">
+                                            <thead class="table-dark">
+                                                <tr>
+                                                    <th class="text-white">Modelo</th>
+                                                    <th class="text-white">Accuracy (Precisión Global)</th>
+                                                    <th class="text-white">Recall (Sensibilidad para "Sí Renuncia")</th>
+                                                    <th class="text-white">AUC (Capacidad de Distinción)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Regresión Logística</td>
+                                                    <td>0.81</td>
+                                                    <td><strong>0.70</strong></td>
+                                                    <td>0.82</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Árbol de Decisión</td>
+                                                    <td>0.79</td>
+                                                    <td>0.51</td>
+                                                    <td>0.77</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Random Forest</td>
+                                                    <td><strong>0.86</strong></td>
+                                                    <td>0.21</td>
+                                                    <td><strong>0.83</strong></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="text-center my-3">
+                                            <p><strong>Comparación de Curvas ROC:</strong></p>
+                                            <img src="plots/roc_curves_comparison.png" alt="Curvas ROC Comparativas" class="img-fluid rounded" style="max-width: 400px;">
+                                        </div>
+                                        <h5>Conclusión Final del Modelado</h5>
+                                        <p>Aunque el modelo <strong>Random Forest</strong> obtiene la mayor precisión global (86%) y la mejor capacidad para distinguir entre clases (AUC de 0.83), sufre de un Recall muy bajo (21%). Esto significa que, si bien es muy bueno para confirmar qué empleados se quedarán, es muy malo para identificar a los que se irán, que es el objetivo principal del negocio.</p>
+                                        <p class="fw-bold">Por lo tanto, el modelo más recomendable para este problema de negocio es la <strong>Regresión Logística</strong>. Ofrece un excelente equilibrio con una precisión global del 81% y, lo más importante, un <strong>Recall del 70%</strong>. Esto cumple con el criterio de éxito definido en la Fase 1, permitiendo a la empresa identificar correctamente a 7 de cada 10 empleados que están en riesgo de renunciar, lo que permite tomar acciones preventivas de manera efectiva.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
